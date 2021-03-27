@@ -1,0 +1,45 @@
+{% extends 'blog/base.html' %}
+
+
+{% block content %}
+<div class="container">
+  <div class="row mt-3 d-flex justify-content-center">
+    <h3 class="text-center mb-4">list of posts</h3>
+    {% for post in posts %}
+    <div class="col-lg-3 col-md-4 colo-sm-6 col m-2">
+      <div class="card" style="width: 18rem;">
+        <!-- <img src="..." class="card-img-top" alt="..."> -->
+        <div class="card-body">
+          <h5 class="card-title">{{post.title}}</h5>
+          <p class="card-text">author : {{post.author}}</p>
+          <a href="{{post.get_absolute_url}}" class="btn btn-primary">see more</a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- paginator -->
+  {% if is_paginated %}
+  <ul class="pagination">
+    {% if page_obj.has_previous %}
+    <li>
+      <span><a href="?page={{ page_obj.previous_page_number }}">Previous</a></span>
+    </li>
+    {% endif %}
+    <li class="">
+      <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.</span>
+    </li>
+    {% if page_obj.has_next %}
+    <li>
+      <span><a href="?page={{ page_obj.next_page_number }}">Next</a></span>
+    </li>
+    {% endif %}
+  </ul>
+  {% else %}
+  <h3>Your File Exam</h3>
+  <p>File not yet available</p>
+  {% endif %}
+  <!-- end paginator -->
+</div>
+{% endblock content %}
