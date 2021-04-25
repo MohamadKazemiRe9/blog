@@ -5,8 +5,52 @@
     <div class="row mt-3 d-flex justify-content-center">
         <div class="col">
             <h4 class="text-center">{{post.title}}</h4>
+            <p>Tags : 
+                {% for tag in post.tags.all %}
+                  <a href="{% url 'blog:post_list' tag.slug %}">{{tag.name}}</a> -
+                {% endfor %}
+            </p>
             <h6 class="text-primary mt-5 mx-3">author : {{post.author}} at <span>{{post.created}}</span></h6>
             <p>{{post.body}}</p>
+        </div>
+        <p>
+            <a href="{% url 'blog:post_share' post.id %}">
+                share
+            </a>
+        </p>
+        <div class="row">
+            <div class="mb-3 col-6">
+                {% with comments.count as total_comments %}
+                  <h3>number of comments : {{total_comments}}</h3>
+                {% endwith %}
+                <form method="POST">
+                    {% csrf_token %}
+                    {% for field in form %}
+                    <div>
+                        {{ field.errors }}
+                        {{ field.label_tag }}<br>
+                        {{ field }} 
+                    </div>
+                    {% endfor %}
+                    <input class="btn btn-primary" type="submit" value="Set Comment">
+                </form>
+            </div>
+            <div class="col-6">
+                {% for cm in comments %}
+                  {{cm.name}} is written : {{cm.body}}
+                  <hr>
+                  <br/>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="row my-3">
+            <h3>Similar Posts :</h3>
+            <div class="col">
+                {% for post in s_posts %}
+                    <a href="{{post.get_absolute_url}}">{{post.title}}</a>
+                    <hr />
+                {% endfor %}
+            </div>
         </div>
     </div>
 </div>
