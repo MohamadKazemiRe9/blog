@@ -1,7 +1,13 @@
 {% extends 'blog/base.html' %}
-
+{% load blog_tags %}
 
 {% block content %}
+
+<h3>we have {% total_posts %} published post</h3>
+
+<h3>Latest Posts :</h3>
+{% show_latest_posts 3 %}
+
 <div class="container">
   <div class="row mt-3 d-flex justify-content-center">
     {% if tag %}
@@ -48,4 +54,7 @@
   {% endif %}
   <!-- end paginator -->
 </div>
+<p>
+  <a href="{% url 'blog:post_feed' %}">Subcribe in RSS</a>
+</p>
 {% endblock content %}

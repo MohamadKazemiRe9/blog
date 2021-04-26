@@ -1,4 +1,5 @@
 {% extends 'blog/base.html' %}
+{% load blog_tags %}
 
 {% block content %}
 <div class="container">
@@ -11,7 +12,7 @@
                 {% endfor %}
             </p>
             <h6 class="text-primary mt-5 mx-3">author : {{post.author}} at <span>{{post.created}}</span></h6>
-            <p>{{post.body}}</p>
+            <p>{{post.body|markdown}}</p>
         </div>
         <p>
             <a href="{% url 'blog:post_share' post.id %}">
