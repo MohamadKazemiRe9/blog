@@ -1,0 +1,25 @@
+{% extends "blog/base.html" %}
+
+
+{% block content %}
+
+{% if query %}
+    <h1>Posts contains {{query}}</h1>
+    <h3>
+        {% with results.count as total_results %}
+          Founde {{total_results}} result
+        {% endwith %}
+    </h3>
+    {% for result in results %}
+      <h4><a href="{{result.get_absolute_url}}">{{result.title}}</a></h4>
+      <p>{{result.body}}</p>
+    {% endfor %}
+{% endif %}
+<h1>Serach Form</h1>
+<form action="" method="GET">
+    {{form.as_p}}
+    <input type="submit" value="Search">
+</form>
+    
+{% endblock content %}
+    
