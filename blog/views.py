@@ -7,7 +7,7 @@ from django.core.mail import send_mail
 from django.http import HttpResponseRedirect
 from taggit.models import Tag
 from django.db.models import Count
-from django.contrib.postgres.search import SearchVector
+from django.contrib.postgres.search import SearchVector , SearchQuery , SearchRank
 
 # Create your views here.
 
@@ -90,5 +90,8 @@ def post_serach(request):
         form = SerachForm(request.GET)
         if form.is_valid():
             query = form.cleaned_data['query']
-            results = Post.published.annotate(search=SearchVector('title','body')).filter(search=query)
+
+            search_vector = SearchVector('title','body')
+            serach_query = SearchQuery(query)
+            results = Post.published.annotate(search=search_vector,rank=SearchRank(search_vector, serach_query)).filter(search=serach_query).order_by('-rank')
     return render(request, 'blog/post/search.html',{'form':form,'query':query,'results':results})
