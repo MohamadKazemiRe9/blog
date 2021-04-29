@@ -91,7 +91,8 @@ def post_serach(request):
         if form.is_valid():
             query = form.cleaned_data['query']
 
-            search_vector = SearchVector('title','body')
+            # A B C D => 1.0 , 0.4 , 0.2 , 0.1
+            search_vector = SearchVector('title', weight='A') + SearchVector('body' , weight="C")
             serach_query = SearchQuery(query)
-            results = Post.published.annotate(search=search_vector,rank=SearchRank(search_vector, serach_query)).filter(search=serach_query).order_by('-rank')
+            results = Post.published.annotate(search=search_vector,rank=SearchRank(search_vector, serach_query)).filter(rank__gte=0.5).order_by('-rank')
     return render(request, 'blog/post/search.html',{'form':form,'query':query,'results':results})
